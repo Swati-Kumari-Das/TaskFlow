@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../utils/axiosInstance";
-
+import { LuUsers } from "react-icons/lu";
 import { API_PATHS } from "../../utils/apiPaths";
 import Modal from "../layouts/Modal";
 const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
