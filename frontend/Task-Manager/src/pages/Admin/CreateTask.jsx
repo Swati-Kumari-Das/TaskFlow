@@ -10,7 +10,7 @@ import { LuTrash2 } from "react-icons/lu";
 import SelectUsers from '../../components/Inputs/SelectUsers';
 import { useState } from 'react';
 import SelectDropdown from '../../components/Inputs/SelectDropdown';
-
+import TodoListInput from '../../components/Inputs/TodoListInput';
 const CreateTask = () => {
 
   const location = useLocation();
@@ -21,7 +21,8 @@ const [taskData, setTaskData] = useState({
     title: "",
     description: "",
     priority: "Low",
-    dueDate: null,
+     dueDate: "",
+    //dueDate: null,
     assignedTo: [],
     todoCheckList: [],
     attachments: []
@@ -42,7 +43,8 @@ const clearData = () => {
         title: "",
         description: "",
         priority: "Low",
-        dueDate: null,
+         dueDate: null,
+       // dueDate: "",
         assignedTo: [],
         todoCheckList: [],
         attachments: []
@@ -134,8 +136,8 @@ return (
                     <input
                         type="date"
                         placeholder="Create App UI"
-                       
-                        value={taskData.dueDate}
+                         className="form-input w-full"
+                        value={taskData.dueDate || ""}
                         onChange={({target}) => handleValueChange("dueDate", target.value)}
                     />
                 </div>
@@ -155,8 +157,30 @@ return (
 
 
 
-               </div>
-                                 
+                </div>
+                <div className="mt-3">
+                    <label className="text-xs font-medium text-slate-600">
+                        TODO Checklist
+                    </label>
+                    <TodoListInput
+                        todoList={taskData?.todoCheckList}
+                        setTodoList={(value) =>
+                            handleValueChange("todoCheckList", value)
+                        }
+                    />
+                </div>  
+
+                 <div className="mt-3">
+                 <label className="text-xs font-medium text-slate-600">
+                       Add Attachments
+                   </label>
+                   <AddAttachmentsInput
+                       attachments={taskData?.attachments}
+                       setAttachments={(value) =>
+                           handleValueChange("attachments", value)
+                       }
+                   />
+               </div>       
               
 
                 </div>
