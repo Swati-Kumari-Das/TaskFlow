@@ -97,6 +97,9 @@ const getTaskById = async (req, res) => {
 // @access  Private (Admin)
 const createTask = async (req, res) => {
     try {
+
+       //   console.log("🔍 Request Body:", req.body);            // ✅ Step 1
+       // console.log("👤 req.user:", req.user);   
         const{
             title,
             description,
@@ -110,10 +113,14 @@ const createTask = async (req, res) => {
         if(!Array.isArray(assignedTo)){
             return res.status(400).json({message:"assignedTo must be an array of user IDs"});
         }
+
+        const formattedPriority =
+  priority?.charAt(0).toUpperCase() + priority?.slice(1).toLowerCase();
         const task=await Task.create({
             title,
             description,
-            priority,
+            //priority,
+              priority: formattedPriority,
             dueDate,
             assignedTo,
             createdBy:req.user._id,
