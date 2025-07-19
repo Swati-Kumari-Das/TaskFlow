@@ -17,9 +17,8 @@ const SelectDropdown = ({ options, value, onChange, placeholder }) => {
                 className="w-full text-sm text-black outline-none bg-white border border-slate-100 px-2.5 py-3 rounded-md mt-2 flex justify-between items-center"
             >
                 
-                    {value ? options.find((opt) => opt.value === value)?.label : placeholder}
-               
-          
+                 {value ? options.find((opt) => opt.value === value)?.label??value : placeholder} 
+              
                     <span className="ml-2">{isOpen ? <LuChevronDown className="rotate-180me" /> : <LuChevronDown />} </span>
                
             </button>
@@ -30,7 +29,7 @@ const SelectDropdown = ({ options, value, onChange, placeholder }) => {
                     {options.map((option) => (
                         <div
                             key={option.value}
-                            onClick={() => handleSelect(option.value)}
+                            onClick={() => handleSelect(option)}
                             className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100"
                         >
                             {option.label}

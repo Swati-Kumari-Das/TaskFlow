@@ -11,6 +11,8 @@ import SelectUsers from '../../components/Inputs/SelectUsers';
 import { useState } from 'react';
 import SelectDropdown from '../../components/Inputs/SelectDropdown';
 import TodoListInput from '../../components/Inputs/TodoListInput';
+import AddAttachmentsInput from '../../components/Inputs/AddAttachmentsInput';
+
 const CreateTask = () => {
 
   const location = useLocation();
@@ -20,11 +22,12 @@ const navigate = useNavigate();
 const [taskData, setTaskData] = useState({
     title: "",
     description: "",
-    priority: "Low",
-     dueDate: "",
-    //dueDate: null,
+   priority: "Low",
+   
+   
+    dueDate: null,
     assignedTo: [],
-    todoCheckList: [],
+    todoChecklist: [],
     attachments: []
 });
 
@@ -43,10 +46,11 @@ const clearData = () => {
         title: "",
         description: "",
         priority: "Low",
+
          dueDate: null,
-       // dueDate: "",
+      
         assignedTo: [],
-        todoCheckList: [],
+        todoChecklist: [],
         attachments: []
     });
     setError("");
@@ -54,13 +58,67 @@ const clearData = () => {
 
 
 //Create Task
-const createTask= async () =>{};
+const createTask = async () => {
+    setLoading(true);
+
+    try {
+        
+        const todoList = taskData.todoChecklist?.map((item) => ({
+            text: item,
+            completed: false,
+        }));
+
+        const response = await axiosInstance.post(API_PATHS.TASKS.CREATE_TASK, {
+            ...taskData,
+           //  priority: taskData.priority.valueOf,
+            dueDate: new Date(taskData.dueDate).toISOString(),
+            todoChecklist: todoList,
+        });
+         console.log("Sending task data:", response); 
+        toast.success("Task Created Successfully");
+        clearData();
+    } catch (error) {
+        console.error("Error creating task:", error);
+       setLoading(false);
+    } finally {
+        setLoading(false);
+    }
+};
 
 //update task
 const updateTask=async() =>{};
 
-const handleSubmit= async() =>{
+const handleSubmit = async () => {
+    setError(null);
 
+    // Input validation
+    if (!taskData.title?.trim()) {
+        setError("Title is required.");
+        return;
+    }
+    if (!taskData.description?.trim()) {
+        setError("Description is required.");
+        return;
+    }
+    if (!taskData.dueDate) {
+        setError("Due date is required.");
+        return;
+    }
+    if (taskData.assignedTo?.length === 0) {
+        setError("Task not assigned to any member");
+        return;
+    }
+    if (taskData.todoChecklist?.length === 0) {
+        setError("Add at least one todo task");
+        return;
+    }
+
+    if (taskId) {
+        updateTask();
+        return;
+    } 
+
+    createTask();
 };
 
 //get Task info By ID 
@@ -121,8 +179,9 @@ return (
                        </label>
                        <SelectDropdown
                            options={PRIORITY_DATA}
+                           
                            value={taskData.priority}
-                           onChange={(value) => handleValueChange("priority", value)}
+                           onChange={(value) => handleValueChange("priority",value)}
                            placeholder="Select Priority"
                        />
                    </div>
@@ -163,9 +222,9 @@ return (
                         TODO Checklist
                     </label>
                     <TodoListInput
-                        todoList={taskData?.todoCheckList}
+                        todoList={taskData?.todoChecklist}
                         setTodoList={(value) =>
-                            handleValueChange("todoCheckList", value)
+                            handleValueChange("todoChecklist", value)
                         }
                     />
                 </div>  
@@ -181,7 +240,22 @@ return (
                        }
                    />
                </div>       
-              
+            {error && (
+            <p className="text-xs font-medium text-red-500 mt-5">
+             {error}
+            </p>
+            )}
+            <div className="flex justify-end mt-7">
+                 <button
+                     className="add-btn"
+                     onClick={handleSubmit}
+                     disabled={loading}
+                 >
+                     {taskId ? "UPDATE TASK" : "CREATE TASK"}
+                 </button>
+             </div>
+
+
 
                 </div>
             </div>
