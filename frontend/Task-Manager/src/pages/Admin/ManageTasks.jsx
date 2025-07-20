@@ -27,7 +27,7 @@ const ManageTasks = () => {
 
 const statusArray = [
     { label: "All", count: statusSummary.all || 0 },
-    { label: "Pending", count: statusSummary.pendingTasks || 0 },
+    { label: "Pending", count: statusSummary.pending || 0 },
     { label: "In Progress", count: statusSummary.inProgress || 0 },
     { label: "Completed", count: statusSummary.completed || 0 }
 ];
@@ -45,9 +45,30 @@ setTabs(statusArray);
     };
 
     // download tasks function would go here
-   const handleDownloadReport=async()=>{
+  // Download task report
+const handleDownloadReport = async () => {
+    try {
+        const response = await axiosInstance.get(API_PATHS.REPORTS.EXPORT_TASKS, {
+            responseType: "blob",
+        });
 
-   };
+        // Create a URL for the blob
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "task_details.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        
+        // Clean up
+        link.parentNode.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        
+    } catch (error) {
+        console.error("Error downloading task details:", error);
+        toast.error("Failed to download task details. Please try again.");
+    }
+};
    useEffect(() =>{
     getAllTasks(filterStatus);
     return () => {};

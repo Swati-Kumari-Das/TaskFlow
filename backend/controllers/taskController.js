@@ -45,20 +45,23 @@ const allTasks = await Task.countDocuments(
 
 const pendingTasks = await Task.countDocuments({
     ...filter,
-    status: "Pending",
+   // status: "Pending",
+    status: { $regex: /^pending$/i },
     ...(req.user.role !== "admin" && { assignedTo: req.user._id }),
 
 });
 
 const inProgressTasks = await Task.countDocuments({
     ...filter,
-    status: "In Progress",
+    //status: "In Progress",
+    status: { $regex: /^in progress$/i },
     ...(req.user.role !== "admin" && { assignedTo: req.user._id }),
 });
 
 const completedTasks = await Task.countDocuments({
     ...filter,
-    status: "Completed",
+   // status: "Completed",
+    status: { $regex: /^completed$/i }, 
     ...(req.user.role !== "admin" && { assignedTo: req.user._id }),
 });
 
@@ -83,10 +86,10 @@ const getTaskById = async (req, res) => {
     try {
         const task=await Task.findById(req.params.id).populate(
             "assignedTo",
-            "name email profileInageUrl"
+            "name email profileImageUrl"
         );
         if(!task) return res.status(404).json({message:"Task not found"});
-        req.json(task);
+        res.json(task);
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
     }
@@ -136,33 +139,79 @@ const createTask = async (req, res) => {
 // @desc    Update task details
 // @route    PUT /api/tasks/:id
 // @access  Private
+// const updateTask = async (req, res) => {
+//     try {
+//          const task = await Task.findById(req.params.id);
+//     if (!task) return res.status(404).json({ message: "Task not found" });
+    
+//     // Update task fields if provided in request
+//     task.title = req.body.title || task.title;
+//     task.description = req.body.description || task.description;
+//     task.priority = req.body.priority || task.priority;
+//     task.dueDate = req.body.dueDate || task.dueDate;
+//     task.todoChecklist = req.body.todoChecklist || task.todoChecklist;
+//     task.attachments = req.body.attachments || task.attachments;
+
+//     // Validate and update assigned users
+//     if (req.body.assignedTo) {
+//         if (!Array.isArray(req.body.assignedTo)) {
+//             return res.status(400).json({ message: "assignedTo must be an array of user IDs" });
+//         }
+//         task.assignedTo = req.body.assignedTo;
+//     }
+
+//     const updatedTask = await task.save();
+//     res.json({ message: "Task updated successfully", updatedTask });
+//     } catch (error) {
+//         res.status(500).json({ message: "Server error", error: error.message });
+//     }
+// }
+
 const updateTask = async (req, res) => {
     try {
-         const task = await Task.findById(req.params.id);
-    if (!task) return res.status(404).json({ message: "Task not found" });
+        console.log("🔧 Incoming update request:", req.body);
+
+        const task = await Task.findById(req.params.id);
+        if (!task) return res.status(404).json({ message: "Task not found" });
+
+        task.title = req.body.title || task.title;
+        task.description = req.body.description || task.description;
+       // task.priority = req.body.priority || task.priority;
+       // Normalize and validate priority
+if (req.body.priority) {
+    const normalizedPriority =
+        req.body.priority.charAt(0).toUpperCase() + req.body.priority.slice(1).toLowerCase();
     
-    // Update task fields if provided in request
-    task.title = req.body.title || task.title;
-    task.description = req.body.description || task.description;
-    task.priority = req.body.priority || task.priority;
-    task.dueDate = req.body.dueDate || task.dueDate;
-    task.todoCheckList = req.body.todoCheckList || task.todoCheckList;
-    task.attachments = req.body.attachments || task.attachments;
-
-    // Validate and update assigned users
-    if (req.body.assignedTo) {
-        if (!Array.isArray(req.body.assignedTo)) {
-            return res.status(400).json({ message: "assignedTo must be an array of user IDs" });
-        }
-        task.assignedTo = req.body.assignedTo;
-    }
-
-    const updatedTask = await task.save();
-    res.json({ message: "Task updated successfully", updatedTask });
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+    const allowedPriorities = ["Low", "Medium", "High"];
+    if (allowedPriorities.includes(normalizedPriority)) {
+        task.priority = normalizedPriority;
+    } else {
+        return res.status(400).json({ message: "Invalid priority value" });
     }
 }
+
+        task.dueDate = req.body.dueDate || task.dueDate;
+        task.todoChecklist = req.body.todoChecklist || task.todoChecklist;
+        task.attachments = req.body.attachments || task.attachments;
+
+        if (req.body.assignedTo) {
+            if (!Array.isArray(req.body.assignedTo)) {
+                console.log("❌ assignedTo is not an array:", req.body.assignedTo);
+                return res.status(400).json({ message: "assignedTo must be an array of user IDs" });
+            }
+            task.assignedTo = req.body.assignedTo;
+        }
+
+        const updatedTask = await task.save();
+        console.log("✅ Task updated:", updatedTask);
+
+        res.json({ message: "Task updated successfully", updatedTask });
+    } catch (error) {
+        console.error("❌ Error in updateTask:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
 
 // @desc    Delete a task (Admin only)
 // @route    DELETE /api/tasks/:id
@@ -172,7 +221,8 @@ const deleteTask = async (req, res) => {
         const task=await Task.findById(req.params.id);
         if(!task) return res.status(404).json({message:"Task not Found"});
         await task.deleteOne();
-        res.json(500).json({message:"Server error,error:error.message"});
+        res.json({ message: "Task deleted successfully" });
+
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
     }

@@ -3,6 +3,7 @@ import Progress from '../Progress';
 import AvatarGroup from '../layouts/AvatarGroup';
 import { LuPaperclip } from 'react-icons/lu';
 import moment from "moment";
+import defaultImage from '../../assets/images/default-image.jpg';
 const TaskCard = (
 
    {   title,
@@ -46,7 +47,10 @@ const getPriorityTagColor = (priority) => {
             className="bg-white rounded-xl py-4 shadow-md shadow-gray-100 border border-gray-200/50 cursor-pointer"
             onClick={onClick}
         >
-            <div className="flex items-end gap-3 px-4">
+            <div className="flex items-end gap-3 px-4 flex-wrap">
+                 <div className={`text-[11px] font-medium ${getStatusTagColor(status)} px-4 py-0.5 rounded`}>
+                     {status}
+                 </div>
                 <div className={`text-[11px] font-medium ${getPriorityTagColor()} px-4 py-0.5 rounded`}>
                     {priority} Priority
                 </div>
