@@ -310,7 +310,7 @@ const updatedTask=await Task.findById(req.params.id).populate(
 );
 res.json({ 
     message: "Task Checklist updated successfully", 
-    task:updateTask
+    task:updatedTask
 });
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
