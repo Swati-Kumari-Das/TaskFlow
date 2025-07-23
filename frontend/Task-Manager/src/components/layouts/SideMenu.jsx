@@ -105,7 +105,7 @@ return (
 
     {/* Main Side Menu Items */}
      {/* 🔔 Notifications Menu Button (outside the .map) */}
-   {user?.role === "user" && (
+   {user?.role !== "admin" && (
     <button
       className={`w-full flex items-center gap-4 text-[15px] py-3 px-6 mb-3 cursor-pointer ${
         activeMenu === "Notifications"
