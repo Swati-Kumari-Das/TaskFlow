@@ -89,34 +89,90 @@ const getTaskDetailsByID = async () => {
 //     toast.error("An error occurred. Please try again.");
 //   }
 // };
+
+//2nd try
+// const updateTodoChecklist = async (index) => {
+//   if (!task || !task.todoChecklist || !task.todoChecklist[index]) return;
+
+//   // Optimistically toggle in local copy
+//   const updatedChecklist = [...task.todoChecklist];
+//   updatedChecklist[index] = {
+//     ...updatedChecklist[index],
+//     completed: !updatedChecklist[index].completed,
+//   };
+
+//   // Update UI immediately
+//   setTask((prevTask) => ({
+//     ...prevTask,
+//     todoChecklist: updatedChecklist,
+//   }));
+
+//   try {
+//     const response = await axiosInstance.put(
+//       API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(task._id),
+//       { todoChecklist: updatedChecklist }
+//     );
+
+//     // Optionally update again with fresh task from backend
+//     if (response.data?.task) {
+//       setTask(response.data.task);
+//     }
+//   } catch (error) {
+//     // Revert change on error
+//     updatedChecklist[index].completed = !updatedChecklist[index].completed;
+
+//     setTask((prevTask) => ({
+//       ...prevTask,
+//       todoChecklist: updatedChecklist,
+//     }));
+
+//     toast.error("Failed to update checklist. Please try again.");
+//   }
+// };
+
+
 const updateTodoChecklist = async (index) => {
   if (!task || !task.todoChecklist || !task.todoChecklist[index]) return;
 
-  // Optimistically toggle in local copy
   const updatedChecklist = [...task.todoChecklist];
   updatedChecklist[index] = {
     ...updatedChecklist[index],
     completed: !updatedChecklist[index].completed,
   };
 
-  // Update UI immediately
   setTask((prevTask) => ({
     ...prevTask,
     todoChecklist: updatedChecklist,
   }));
 
   try {
+    // 1️⃣ Update checklist
     const response = await axiosInstance.put(
       API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(task._id),
       { todoChecklist: updatedChecklist }
     );
 
-    // Optionally update again with fresh task from backend
     if (response.data?.task) {
-      setTask(response.data.task);
+      const updatedTask = response.data.task;
+      setTask(updatedTask);
+
+      // 2️⃣ If all checklist items are now completed, update task status to "Completed"
+      const allDone = updatedTask.todoChecklist.every((item) => item.completed);
+
+      if (allDone && updatedTask.status !== "Completed") {
+        const statusResponse = await axiosInstance.patch(
+          API_PATHS.TASKS.UPDATE_TASK_STATUS(updatedTask._id),
+          { status: "Completed" }
+        );
+
+        if (statusResponse.data?.task) {
+          setTask(statusResponse.data.task); // update task again
+          toast.success("Task marked as Completed!");
+        }
+      }
     }
   } catch (error) {
-    // Revert change on error
+    // revert on error
     updatedChecklist[index].completed = !updatedChecklist[index].completed;
 
     setTask((prevTask) => ({

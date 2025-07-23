@@ -21,16 +21,20 @@ import PrivateRoute from './routes/PrivateRoute';
 import ViewTaskDetails from './pages/User/ViewTaskDetails';
 import './index.css';
 import UserProvider from './context/userContext';
+import NotificationPage from './pages/NotificationPage';
+import NotificationProvider from './context/NotificationContext';
 import { Toaster } from 'react-hot-toast';
 
 const App = () => {
   return (
   <UserProvider>
+      <NotificationProvider>
    <div>
     <Router>
       <Routes>
         <Route path='/login' element={<Login/>}/>
          <Route path='/signUp' element={<SignUp/>}/>
+         <Route path="/notifications" element={<NotificationPage />} />
 
          {/* Admin Routes */}
          <Route element={<PrivateRoute allowedRoles={["admin"]}/>}>
@@ -41,7 +45,7 @@ const App = () => {
          </Route>
 
          {/* User Routes */}
-         <Route element={<PrivateRoute allowedRoles={["admin"]}/>}>
+         <Route element={<PrivateRoute allowedRoles={["user"]}/>}>
            <Route path='/user/dashboard' element={<UserDashboard/>}/>
            <Route path='/user/tasks' element={<MyTasks/>}/> 
           <Route path='/user/task-details/:id' element={<ViewTaskDetails/>}/> 
@@ -62,6 +66,7 @@ const App = () => {
        fontSize:"13px",
       },
     }}/>
+    </NotificationProvider>
    </UserProvider>
   );
 };

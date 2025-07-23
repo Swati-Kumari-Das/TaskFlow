@@ -1,9 +1,18 @@
 import React from 'react';
 import defaultImage from '../../assets/images/default-image.jpg';
+import { MdDelete } from "react-icons/md";
 
-const UserCard = ({ userInfo }) => {
+const UserCard = ({ userInfo,onDelete }) => {
     return (
-        <div className="user-card p-2">
+        <div className="user-card p-2 relative">
+             
+               <button
+                className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                onClick={() => onDelete(userInfo._id)}
+                title="Delete User"
+            >
+                <MdDelete size={16} />
+            </button>
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <img 

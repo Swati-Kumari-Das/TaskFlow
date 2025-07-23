@@ -4,6 +4,7 @@ import axiosInstance from "../../utils/axiosInstance";// Make sure to import axi
 import { API_PATHS } from "../../utils/apiPaths"; // Adjust import path as needed
 import { LuFileSpreadsheet } from "react-icons/lu";
 import UserCard from "../../components/Cards/UserCard";
+import toast from "react-hot-toast";
 const ManageUsers = () => {
     const [allUsers, setAllUsers] = useState([]);
 
@@ -17,6 +18,18 @@ const ManageUsers = () => {
             console.error("Error fetching users:", error);
         }
     };
+const handleDeleteUser = async (userId) => {
+  if (!window.confirm("Are you sure you want to delete this user?")) return;
+
+  try {
+      await axiosInstance.delete(API_PATHS.USERS.DELETE_USER(userId));
+    setAllUsers(prev => prev.filter(user => user._id !== userId));
+     toast.success("User deleted successfully");
+  } catch (error) {
+    console.error("Failed to delete user:", error);
+     toast.error(error.response?.data?.message || "Failed to delete user");
+  }
+};
 
   //Download task Report
  // download task report
@@ -66,7 +79,7 @@ const handleDownloadReport = async () => {
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
     {allUsers?.map((user) => (
-        <UserCard key={user._id} userInfo={user} />
+        <UserCard key={user._id} userInfo={user} onDelete={handleDeleteUser} />
     ))}
   </div>
   </div>

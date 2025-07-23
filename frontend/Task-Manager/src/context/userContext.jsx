@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
-
+import socket from "../utils/socket"; // 👈 import socket
 export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
@@ -31,6 +31,18 @@ const UserProvider = ({ children }) => {
 
         fetchUser();
     }, []);
+ 
+      // ✅ Connect socket after user is loaded
+    useEffect(() => {
+        if (user?._id) {
+            socket.connect();
+            socket.emit("join", user._id); // Backend joins this user to their socket room
+        }
+
+        return () => {
+            socket.disconnect();
+        };
+    }, [user]);
 
     const updateUser = (userData) => {
         setUser(userData);
