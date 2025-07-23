@@ -19,7 +19,13 @@ const MyTasks = () => {
         status: filterStatus === "All" ? "" : filterStatus,
       },
     });
-    setAllTasks(response.data?.tasks?.length >0 ?response.data.tasks : []);
+   // setAllTasks(response.data?.tasks?.length >0 ?response.data.tasks : []);
+   const sortedTasks = response.data?.tasks?.length > 0
+  ? response.data.tasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  : [];
+
+setAllTasks(sortedTasks);
+
     // Handle response here (e.g., set state)
 
     //Map status Summary data with fixed labels and order 
