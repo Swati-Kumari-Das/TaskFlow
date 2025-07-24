@@ -17,8 +17,11 @@ Built with the **MERN Stack** (MongoDB, Express.js, React.js, Node.js) and style
 ## 📸 Screenshots
 
 > Here are a few key pages from the project:
-
-### ✅ Admin Dashboard
+### Login Page
+<img width="1888" height="899" alt="image" src="https://github.com/user-attachments/assets/35d5bf7d-3503-4748-bd5e-27c4aa03d712" />
+### SignUp Page
+<img width="1905" height="890" alt="image" src="https://github.com/user-attachments/assets/47d97789-0fa3-430f-b5eb-d6f6a49c781e" />
+###  Admin Dashboard
 
 - View total, pending, completed, and in-progress tasks.
 - See graphical stats for task distribution and priority levels.
