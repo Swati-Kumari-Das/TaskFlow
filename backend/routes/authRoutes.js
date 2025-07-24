@@ -25,13 +25,28 @@ router.put("/profile", protect, updateUserProfile); // Update Profile
 // });
 
 
-router.post("/upload-image", upload.single("image"), (req, res) => {
+// router.post("/upload-image", upload.single("image"), (req, res) => {
+//   if (!req.file || !req.file.path) {
+//     return res.status(400).json({ message: "Image upload failed" });
+//   }
+
+//   const imageUrl = req.file.path; // This is the public Cloudinary URL
+//   res.status(200).json({ imageUrl });
+// });
+
+
+// controllers/imageController.js or similar
+// Image upload route
+router.post('/upload-image', upload.single('image'), (req, res) => {
   if (!req.file || !req.file.path) {
-    return res.status(400).json({ message: "Image upload failed" });
+    return res.status(400).json({ message: 'Image upload failed' });
   }
 
-  const imageUrl = req.file.path; // This is the public Cloudinary URL
-  res.status(200).json({ imageUrl });
+  // ✅ Cloudinary URL already available in req.file.path
+  return res.status(200).json({ imageUrl: req.file.path });
 });
+
+module.exports = router;
+
 
 module.exports = router;
