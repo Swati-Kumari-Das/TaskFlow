@@ -53,19 +53,14 @@ A full-stack **Task Management System** designed for teams and admins to efficie
 - Reorder or delete individual subtasks
 - Changes are immediately reflected for assigned users
  Admins can also **delete the task** using the `Delete` button at the top right.
-<img width="1915" height="875" alt="image" src="https://github.com/user-attachments/assets/748f19c3-2cbd-464b-a0ed-68f122f67b3b" />
-
----
 <img width="1758" height="913" alt="image" src="https://github.com/user-attachments/assets/795461ef-cdb6-4340-b159-f6e89850f4bd" />
-
+---
 
 ### 👥 Team Members
 
 - View all team members with their respective task statuses.
 - Option to delete a member and download reports.
-
 <img width="1895" height="879" alt="image" src="https://github.com/user-attachments/assets/4da736ba-66cf-47f3-b83b-8e4761d0b141" />
-
 ---
 
 ### 🔔 Notifications For Team Members
@@ -73,8 +68,6 @@ A full-stack **Task Management System** designed for teams and admins to efficie
 - Real-time notifications using **Socket.IO** with sound alert when task is assigned.
 - Members can delete individual notifications or clear all.
 <img width="1882" height="914" alt="image" src="https://github.com/user-attachments/assets/731144ce-16ef-46d8-af64-7d7c2ae89377" />
-
-
 ---
 
 ### 📌 My Tasks (Team Member View)
@@ -85,6 +78,15 @@ A full-stack **Task Management System** designed for teams and admins to efficie
 
 
 ---
+### ✅ User Dashboard
+- View total, pending, completed, and in-progress tasks.
+- See graphical stats for task distribution and priority levels.
+ <img width="1897" height="923" alt="image" src="https://github.com/user-attachments/assets/16a606b7-3d7c-46c3-b4ee-66a34851d58b" />
+ ---
+### Tasks Detail (Team Member View)
+- View details of the Task.
+-can update status of the task.
+<img width="1817" height="900" alt="image" src="https://github.com/user-attachments/assets/b2dafb18-0062-478a-8d55-6b47bcb7ee15" />
 
 ## 🛠️ Tech Stack
 
@@ -123,6 +125,7 @@ A full-stack **Task Management System** designed for teams and admins to efficie
 ### 👩‍💻 Team Member Features
 
 - Secure Member Login
+- Dashboard with charts and statistics
 - View tasks assigned to them
 - Track progress, status, and deadlines
 - Mark subtasks as complete
@@ -136,7 +139,7 @@ A full-stack **Task Management System** designed for teams and admins to efficie
 - ✅ Real-time notifications via **Socket.IO**
 - ✅ Sound alerts for new notifications
 - ✅ Local image upload (using **Multer**) for profile pictures
-- ✅ File link input for task attachments
+- ✅ link input for task attachments
 - ✅ Due Date Reminders visible on task cards
 - ✅ Responsive UI built using **Tailwind CSS**
 
