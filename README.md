@@ -1,6 +1,10 @@
-# 🧩 Task Manager Web Application
 
-A full-stack **Task Management System** designed for teams and admins to efficiently manage, assign, track, and complete tasks. Built with **MERN Stack** (MongoDB, Express.js, React, Node.js) and styled using **Tailwind CSS**, this app provides real-time notifications using **Socket.IO** and supports **file attachments**, **due date reminders**, and **local image uploads** for user profiles.
+
+#  TaskFlow – Task Management & Project Collaboration Tool
+
+A full-stack **Task Management and Project Collaboration Tool** designed for teams and admins to efficiently manage, assign, track, and complete tasks.
+
+Built with the **MERN Stack** (MongoDB, Express.js, React.js, Node.js) and styled using **Tailwind CSS**, this powerful system provides real-time updates via **Socket.IO**, supports **local image uploads**, **task attachments**, **due date reminders**, and ensures smooth task coordination within teams.
 
 ---
 
